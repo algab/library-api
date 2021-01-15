@@ -1,6 +1,14 @@
 package com.example.libraryapi.dto;
 
+import lombok.Data;
+
+import javax.validation.constraints.NotNull;
+
+@Data
 public class LoanFormDTO {
-    private String idBook;
-    private String idUser;
+    @NotNull(message = "idBook is required")
+    private Integer idBook;
+
+    @NotNull(message = "idUser is required")
+    private Integer idUser;
 }
