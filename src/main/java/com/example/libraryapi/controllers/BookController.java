@@ -6,12 +6,15 @@ import com.example.libraryapi.dto.LoanUserDTO;
 import com.example.libraryapi.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/books")
@@ -26,8 +29,10 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookDTO>> findAll() {
-        List<BookDTO> books = this.service.findAll();
+    public ResponseEntity<Page<BookDTO>> findAll(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable page
+    ) {
+        Page<BookDTO> books = this.service.findAll(page);
         return ResponseEntity.ok(books);
     }
 
@@ -38,8 +43,11 @@ public class BookController {
     }
 
     @GetMapping(path = "/{id}/loans")
-    public ResponseEntity<List<LoanUserDTO>> findLoans(@PathVariable Long id) {
-        List<LoanUserDTO> loans = this.service.findLoans(id);
+    public ResponseEntity<Page<LoanUserDTO>> findLoans(
+            @PathVariable Long id,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable page
+    ) {
+        Page<LoanUserDTO> loans = this.service.findLoans(id, page);
         return ResponseEntity.ok(loans);
     }
 

@@ -10,6 +10,9 @@ import com.example.libraryapi.repositories.BookRepository;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +37,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> findAll() {
-        return repository.findAll()
+    public Page<BookDTO> findAll(Pageable page) {
+        Page<Book> books = this.repository.findAll(page);
+        List<BookDTO> listBooks = books.getContent()
                 .stream()
                 .map(book -> mapper.map(book, BookDTO.class))
                 .collect(Collectors.toList());
+        return new PageImpl<BookDTO>(listBooks, page, books.getTotalElements());
     }
 
     @Override
@@ -49,11 +54,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<LoanUserDTO> findLoans(Long id) {
-        return repository.findLoanUser(id)
+    public Page<LoanUserDTO> findLoans(Long id, Pageable page) {
+        Page<Loan> loans = this.repository.findLoanUser(id, page);
+        List<LoanUserDTO> loansUsers = loans.getContent()
                 .stream()
                 .map(loan -> mapper.map(loan, LoanUserDTO.class))
                 .collect(Collectors.toList());
+        return new PageImpl<LoanUserDTO>(loansUsers, page, loans.getTotalElements());
     }
 
     @Override
