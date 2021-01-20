@@ -1,5 +1,6 @@
 package com.example.libraryapi.services;
 
+import com.example.libraryapi.dto.LoanBookDTO;
 import com.example.libraryapi.dto.UserDTO;
 import com.example.libraryapi.dto.UserFormDTO;
 import com.example.libraryapi.entities.User;
@@ -44,6 +45,14 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "User not found"));
         return mapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public List<LoanBookDTO> findLoans(Long id) {
+        return repository.findLoans(id)
+                .stream()
+                .map(loan -> mapper.map(loan, LoanBookDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

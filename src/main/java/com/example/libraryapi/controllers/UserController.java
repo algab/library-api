@@ -1,5 +1,6 @@
 package com.example.libraryapi.controllers;
 
+import com.example.libraryapi.dto.LoanBookDTO;
 import com.example.libraryapi.dto.UserDTO;
 import com.example.libraryapi.dto.UserFormDTO;
 import com.example.libraryapi.services.UserService;
@@ -34,6 +35,12 @@ public class UserController {
     public ResponseEntity<UserDTO> search(@PathVariable Long id) {
         UserDTO user = this.service.search(id);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping(path = "/{id}/loans")
+    public ResponseEntity<List<LoanBookDTO>> findLoans(@PathVariable Long id) {
+        List<LoanBookDTO> loans = this.service.findLoans(id);
+        return ResponseEntity.ok(loans);
     }
 
     @PutMapping(path = "/{id}")
