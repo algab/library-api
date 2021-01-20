@@ -2,6 +2,7 @@ package com.example.libraryapi.controllers;
 
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
+import com.example.libraryapi.dto.LoanUserDTO;
 import com.example.libraryapi.services.BookService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,12 @@ public class BookController {
     public ResponseEntity<BookDTO> search(@PathVariable Long id) {
         BookDTO book = this.service.search(id);
         return ResponseEntity.ok(book);
+    }
+
+    @GetMapping(path = "/{id}/loans")
+    public ResponseEntity<List<LoanUserDTO>> findLoans(@PathVariable Long id) {
+        List<LoanUserDTO> loans = this.service.findLoans(id);
+        return ResponseEntity.ok(loans);
     }
 
     @PutMapping(path = "/{id}")

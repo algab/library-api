@@ -2,7 +2,9 @@ package com.example.libraryapi.services;
 
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
+import com.example.libraryapi.dto.LoanUserDTO;
 import com.example.libraryapi.entities.Book;
+import com.example.libraryapi.entities.Loan;
 import com.example.libraryapi.exceptions.BusinessException;
 import com.example.libraryapi.repositories.BookRepository;
 
@@ -44,6 +46,14 @@ public class BookServiceImpl implements BookService {
         Book book = repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
         return mapper.map(book, BookDTO.class);
+    }
+
+    @Override
+    public List<LoanUserDTO> findLoans(Long id) {
+        return repository.findLoanUser(id)
+                .stream()
+                .map(loan -> mapper.map(loan, LoanUserDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
