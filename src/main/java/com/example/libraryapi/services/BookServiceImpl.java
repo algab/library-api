@@ -55,7 +55,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<LoanUserDTO> findLoans(Long id, Pageable page) {
-        Page<Loan> loans = this.repository.findLoanUser(id, page);
+        Page<Loan> loans = this.repository.findLoans(id, page);
         List<LoanUserDTO> loansUsers = loans.getContent()
                 .stream()
                 .map(loan -> mapper.map(loan, LoanUserDTO.class))
