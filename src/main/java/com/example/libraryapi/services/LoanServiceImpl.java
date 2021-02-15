@@ -32,22 +32,22 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public LoanDTO save(LoanFormDTO body) {
-        Book book = bookRepository.findById(body.getIdBook().longValue())
+        Book book = this.bookRepository.findById(body.getIdBook().longValue())
                 .orElseThrow(() -> new BusinessException(404,"NOT_FOUND","Book not found"));
-        User user = userRepository.findById(body.getIdUser().longValue())
+        User user = this.userRepository.findById(body.getIdUser().longValue())
                 .orElseThrow(() -> new BusinessException(404,"NOT_FOUND","User not found"));
         Loan loan = new Loan(LocalDate.now(), false, book, user);
-        Loan loanSaved = loanRepository.save(loan);
+        Loan loanSaved = this.loanRepository.save(loan);
         return mapper.map(loanSaved, LoanDTO.class);
     }
 
     @Override
     public LoanDTO deliver(Long id) {
-        Loan loan = loanRepository.findById(id)
+        Loan loan = this.loanRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(404,"NOT_FOUND","Loan not found"));
         if (!loan.getReturned()) {
             loan.setReturned(true);
-            loanRepository.save(loan);
+            this.loanRepository.save(loan);
             return mapper.map(loan, LoanDTO.class);
         } else {
             throw new BusinessException(409, "CONFLICT", "Book already delivered");
@@ -56,8 +56,8 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public void delete(Long id) {
-        Loan loan = loanRepository.findById(id)
+        Loan loan = this.loanRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(404,"NOT_FOUND","Loan not found"));
-        loanRepository.delete(loan);
+        this.loanRepository.delete(loan);
     }
 }

@@ -28,8 +28,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO save(BookFormDTO body) {
-        if (!repository.existsByIsbn(body.getIsbn())) {
-            Book book = repository.save(mapper.map(body, Book.class));
+        if (!this.repository.existsByIsbn(body.getIsbn())) {
+            Book book = this.repository.save(mapper.map(body, Book.class));
             return mapper.map(book, BookDTO.class);
         } else {
             throw new BusinessException(409, "CONFLICT", "ISBN is conflict");
@@ -43,12 +43,12 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(book -> mapper.map(book, BookDTO.class))
                 .collect(Collectors.toList());
-        return new PageImpl<BookDTO>(listBooks, page, books.getTotalElements());
+        return new PageImpl<>(listBooks, page, books.getTotalElements());
     }
 
     @Override
     public BookDTO search(Long id) throws BusinessException {
-        Book book = repository.findById(id)
+        Book book = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
         return mapper.map(book, BookDTO.class);
     }
@@ -60,22 +60,22 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(loan -> mapper.map(loan, LoanUserDTO.class))
                 .collect(Collectors.toList());
-        return new PageImpl<LoanUserDTO>(loansUsers, page, loans.getTotalElements());
+        return new PageImpl<>(loansUsers, page, loans.getTotalElements());
     }
 
     @Override
     public BookDTO update(Long id, BookFormDTO body) throws BusinessException {
-        Book book = repository.findById(id)
+        Book book = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
         book.setTitle(body.getTitle());
         book.setAuthor(body.getAuthor());
         if (body.getIsbn().equals(book.getIsbn())) {
-            Book bookUpdated = repository.save(book);
+            Book bookUpdated = this.repository.save(book);
             return mapper.map(bookUpdated, BookDTO.class);
         } else {
-            if (!repository.existsByIsbn(body.getIsbn())) {
+            if (!this.repository.existsByIsbn(body.getIsbn())) {
                 book.setIsbn(body.getIsbn());
-                Book bookUpdated = repository.save(book);
+                Book bookUpdated = this.repository.save(book);
                 return mapper.map(bookUpdated, BookDTO.class);
             } else {
                 throw new BusinessException(409, "CONFLICT", "ISBN is conflict");
@@ -85,8 +85,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void delete(Long id) throws BusinessException {
-        Book book = repository.findById(id)
+        Book book = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
-        repository.delete(book);
+        this.repository.delete(book);
     }
 }

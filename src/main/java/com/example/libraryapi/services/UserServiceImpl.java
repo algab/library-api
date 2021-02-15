@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(UserFormDTO body) {
-        if (!repository.existsByEmail(body.getEmail())) {
-            User user = repository.save(mapper.map(body, User.class));
+        if (!this.repository.existsByEmail(body.getEmail())) {
+            User user = this.repository.save(mapper.map(body, User.class));
             return mapper.map(user, UserDTO.class);
         } else {
             throw new BusinessException(409,"CONFLICT", "E-mail is conflict");
@@ -65,16 +65,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(Long id, UserFormDTO body) {
-        User user = repository.findById(id)
+        User user = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "User not found"));
         user.setName(body.getName());
         if (body.getEmail().equals(user.getEmail())) {
-            User userUpdated = repository.save(user);
+            User userUpdated = this.repository.save(user);
             return mapper.map(userUpdated, UserDTO.class);
         } else {
-            if (!repository.existsByEmail(body.getEmail())) {
+            if (!this.repository.existsByEmail(body.getEmail())) {
                 user.setEmail(body.getEmail());
-                User userUpdated = repository.save(user);
+                User userUpdated = this.repository.save(user);
                 return mapper.map(userUpdated, UserDTO.class);
             } else {
                 throw new BusinessException(409,"CONFLICT", "E-mail is conflict");
@@ -84,8 +84,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        User user = repository.findById(id)
+        User user = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "User not found"));
-        repository.delete(user);
+        this.repository.delete(user);
     }
 }
