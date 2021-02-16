@@ -1,5 +1,6 @@
 package com.example.libraryapi.builder;
 
+import com.example.libraryapi.dto.LoanDTO;
 import com.example.libraryapi.dto.LoanFormDTO;
 import com.example.libraryapi.entities.Loan;
 
@@ -13,6 +14,16 @@ public final class LoanBuilder {
         loan.setDate(LocalDate.now());
         loan.setBook(BookBuilder.getBook());
         loan.setUser(UserBuilder.getUser());
+        return loan;
+    }
+
+    public static LoanDTO getLoanDTO() {
+        LoanDTO loan = new LoanDTO();
+        loan.setId(1L);
+        loan.setReturned(false);
+        loan.setDate(LocalDate.now());
+        loan.setBook(BookBuilder.getBookDTO());
+        loan.setUser(UserBuilder.getUserDTO());
         return loan;
     }
 

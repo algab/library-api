@@ -1,5 +1,6 @@
 package com.example.libraryapi.builder;
 
+import com.example.libraryapi.dto.UserDTO;
 import com.example.libraryapi.dto.UserFormDTO;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
@@ -21,11 +22,31 @@ public final class UserBuilder {
         return user;
     }
 
+    public static UserDTO getUserDTO() {
+        UserDTO user = new UserDTO();
+        user.setId(1L);
+        user.setName("Autor Teste");
+        user.setEmail("teste@email.com");
+        return user;
+    }
+
     public static UserFormDTO getUserFormDTO() {
         UserFormDTO userForm = new UserFormDTO();
         userForm.setName("Autor Teste");
         userForm.setEmail("teste@email.com");
         return userForm;
+    }
+
+    public static Page<UserDTO> listUsers() {
+        UserDTO user = new UserDTO();
+        user.setId(1L);
+        user.setName("Autor Teste");
+        user.setEmail("teste@email.com");
+
+        List<UserDTO> users = new ArrayList<>();
+        users.add(user);
+
+        return new PageImpl<>(users, PageRequest.of(0, 1), 1);
     }
 
     public static Page<Loan> loansUser() {

@@ -1,5 +1,6 @@
 package com.example.libraryapi.builder;
 
+import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
@@ -22,12 +23,34 @@ public final class BookBuilder {
         return book;
     }
 
+    public static BookDTO getBookDTO() {
+        BookDTO book = new BookDTO();
+        book.setId(1L);
+        book.setIsbn("1010");
+        book.setTitle("Livro Teste");
+        book.setAuthor("Teste");
+        return book;
+    }
+
     public static BookFormDTO getBookFormDTO() {
         BookFormDTO bookForm = new BookFormDTO();
         bookForm.setIsbn("1010");
         bookForm.setTitle("Livro Teste");
         bookForm.setAuthor("Teste");
         return bookForm;
+    }
+
+    public static Page<BookDTO> listBooks() {
+        BookDTO book = new BookDTO();
+        book.setId(1L);
+        book.setIsbn("1010");
+        book.setTitle("Livro Teste");
+        book.setAuthor("Teste");
+
+        List<BookDTO> books = new ArrayList<>();
+        books.add(book);
+
+        return new PageImpl<>(books, PageRequest.of(0, 1), 1);
     }
 
     public static Page<Loan> loansBook() {
