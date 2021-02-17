@@ -10,5 +10,5 @@ API Rest developed with Java, Maven and PostrgreSQL
 
 ```
 ./mvnw clean package
-java -jar target/mycustomers-0.0.1-SNAPSHOT.jar
+java -jar target/library-api-0.0.1-SNAPSHOT.jar
 ```
