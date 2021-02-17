@@ -3,6 +3,7 @@ package com.example.libraryapi.controllers;
 import com.example.libraryapi.builder.BookBuilder;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
+import com.example.libraryapi.dto.LoanUserDTO;
 import com.example.libraryapi.exceptions.BusinessException;
 import com.example.libraryapi.services.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.*;
 import org.mockito.BDDMockito;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -85,6 +85,16 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Save book controller validate no body")
+    public void saveBook_NoBody() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.post(API_BOOKS)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(request).andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("List Books Controller")
     public void listBooks() throws Exception {
         Page<BookDTO> page = BookBuilder.listBooks();
@@ -116,6 +126,23 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
         mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
+    }
+
+    @Test
+    @DisplayName("Get loans book by id")
+    public void loansBook() throws Exception {
+        Page<LoanUserDTO> page = BookBuilder.getLoansBook();
+        BDDMockito.given(this.service.findLoans(anyLong(),any(PageRequest.class))).willReturn(page);
+
+        RequestBuilder request = MockMvcRequestBuilders.get(API_BOOKS.concat("/" + 1 + "/loans"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(jsonPath("content").isArray());
+        mockMvc.perform(request).andExpect(jsonPath("size").value(1));
+        mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
     }
 
     @Test

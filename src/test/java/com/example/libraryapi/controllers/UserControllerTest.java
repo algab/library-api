@@ -1,6 +1,7 @@
 package com.example.libraryapi.controllers;
 
 import com.example.libraryapi.builder.UserBuilder;
+import com.example.libraryapi.dto.LoanBookDTO;
 import com.example.libraryapi.dto.UserDTO;
 import com.example.libraryapi.dto.UserFormDTO;
 import com.example.libraryapi.exceptions.BusinessException;
@@ -84,6 +85,16 @@ public class UserControllerTest {
     }
 
     @Test
+    @DisplayName("Save user controller validate no body")
+    public void saveUser_NoBody() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders.post(API_USERS)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(request).andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("List Users Controller")
     public void listUsers() throws Exception {
         Page<UserDTO> page = UserBuilder.listUsers();
@@ -114,6 +125,23 @@ public class UserControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(user.getId()));
         mockMvc.perform(request).andExpect(jsonPath("name").value(user.getName()));
         mockMvc.perform(request).andExpect(jsonPath("email").value(user.getEmail()));
+    }
+
+    @Test
+    @DisplayName("Get loans user by id")
+    public void loansUser() throws Exception {
+        Page<LoanBookDTO> page = UserBuilder.getLoansUser();
+        BDDMockito.given(this.service.findLoans(anyLong(),any(PageRequest.class))).willReturn(page);
+
+        RequestBuilder request = MockMvcRequestBuilders.get(API_USERS.concat("/" + 1 + "/loans"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(jsonPath("content").isArray());
+        mockMvc.perform(request).andExpect(jsonPath("size").value(1));
+        mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
     }
 
     @Test

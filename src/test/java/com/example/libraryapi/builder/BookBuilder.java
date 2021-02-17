@@ -2,6 +2,7 @@ package com.example.libraryapi.builder;
 
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
+import com.example.libraryapi.dto.LoanUserDTO;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
 import com.example.libraryapi.entities.User;
@@ -51,6 +52,19 @@ public final class BookBuilder {
         books.add(book);
 
         return new PageImpl<>(books, PageRequest.of(0, 1), 1);
+    }
+
+    public static Page<LoanUserDTO> getLoansBook() {
+        LoanUserDTO loan = new LoanUserDTO();
+        loan.setId(1L);
+        loan.setReturned(false);
+        loan.setDate(LocalDate.now());
+        loan.setUser(UserBuilder.getUserDTO());
+
+        List<LoanUserDTO> loans = new ArrayList<>();
+        loans.add(loan);
+
+        return new PageImpl<>(loans, PageRequest.of(0, 1), 1);
     }
 
     public static Page<Loan> loansBook() {
