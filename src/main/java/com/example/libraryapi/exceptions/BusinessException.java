@@ -4,8 +4,11 @@ import lombok.Data;
 
 @Data
 public class BusinessException extends RuntimeException {
+
     private Integer status;
+
     private String error;
+
     private String message;
 
     public BusinessException(Integer status, String error, String message) {
@@ -14,4 +17,5 @@ public class BusinessException extends RuntimeException {
         this.error = error;
         this.message = message;
     }
+
 }
