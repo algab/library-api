@@ -134,7 +134,7 @@ public class UserRepositoryTest {
     public User createLoan() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         User user = new User();

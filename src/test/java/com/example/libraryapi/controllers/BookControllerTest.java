@@ -55,7 +55,7 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
+        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
+        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test
@@ -150,8 +150,8 @@ public class BookControllerTest {
     public void updateBook() throws Exception {
         BookDTO book = BookBuilder.getBookDTO();
         BookFormDTO bookForm = BookBuilder.getBookFormDTO();
-        book.setAuthor("Novo Teste");
-        bookForm.setAuthor("Novo Teste");
+        //book.setAuthor("Novo Teste");
+        //bookForm.setAuthor("Novo Teste");
         BDDMockito.given(this.service.update(anyLong(),any(BookFormDTO.class))).willReturn(book);
         String json = new ObjectMapper().writeValueAsString(bookForm);
 
@@ -163,7 +163,7 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
+        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test

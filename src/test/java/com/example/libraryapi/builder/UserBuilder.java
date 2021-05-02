@@ -67,7 +67,7 @@ public final class UserBuilder {
         Book book = new Book();
         book.setId(1L);
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         User user = new User();

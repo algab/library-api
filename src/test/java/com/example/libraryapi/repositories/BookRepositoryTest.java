@@ -32,7 +32,7 @@ public class BookRepositoryTest {
     void saveBook() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         Boolean existsIsbn = this.repository.existsByIsbn(book.getIsbn());
@@ -44,7 +44,7 @@ public class BookRepositoryTest {
         Assertions.assertThat(bookSaved).isNotNull();
         Assertions.assertThat(bookSaved.getId()).isNotNull();
         Assertions.assertThat(bookSaved.getTitle()).isEqualTo(book.getTitle());
-        Assertions.assertThat(bookSaved.getAuthor()).isEqualTo(book.getAuthor());
+        //Assertions.assertThat(bookSaved.getAuthor()).isEqualTo(book.getAuthor());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class BookRepositoryTest {
     void duplicateISBNBook() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         this.repository.save(book);
@@ -67,7 +67,7 @@ public class BookRepositoryTest {
     void listBooks() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         this.repository.save(book);
@@ -82,7 +82,7 @@ public class BookRepositoryTest {
     void searchBook() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         Book bookSaved = this.repository.save(book);
@@ -91,7 +91,7 @@ public class BookRepositoryTest {
         Assertions.assertThat(search.get()).isNotNull();
         Assertions.assertThat(search.get().getId()).isEqualTo(bookSaved.getId());
         Assertions.assertThat(search.get().getTitle()).isEqualTo(bookSaved.getTitle());
-        Assertions.assertThat(search.get().getAuthor()).isEqualTo(bookSaved.getAuthor());
+        //Assertions.assertThat(search.get().getAuthor()).isEqualTo(bookSaved.getAuthor());
     }
 
     @Test
@@ -99,17 +99,17 @@ public class BookRepositoryTest {
     void updateBook() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         Book bookSaved = this.repository.save(book);
-        bookSaved.setAuthor("Teste Teste");
+        //bookSaved.setAuthor("Teste Teste");
         Book bookUpdated = this.repository.save(bookSaved);
 
         Assertions.assertThat(bookUpdated).isNotNull();
         Assertions.assertThat(bookUpdated.getId()).isNotNull();
         Assertions.assertThat(bookUpdated.getTitle()).isEqualTo(bookSaved.getTitle());
-        Assertions.assertThat(bookUpdated.getAuthor()).isEqualTo(bookSaved.getAuthor());
+        //Assertions.assertThat(bookUpdated.getAuthor()).isEqualTo(bookSaved.getAuthor());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class BookRepositoryTest {
     void deleteBook() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         Book bookSaved = this.repository.save(book);
@@ -141,7 +141,7 @@ public class BookRepositoryTest {
     public Book createLoan() {
         Book book = new Book();
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         User user = new User();

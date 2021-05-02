@@ -20,7 +20,7 @@ public final class BookBuilder {
         book.setId(1L);
         book.setIsbn("1010");
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         return book;
     }
 
@@ -29,7 +29,7 @@ public final class BookBuilder {
         book.setId(1L);
         book.setIsbn("1010");
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         return book;
     }
 
@@ -37,7 +37,7 @@ public final class BookBuilder {
         BookFormDTO bookForm = new BookFormDTO();
         bookForm.setIsbn("1010");
         bookForm.setTitle("Livro Teste");
-        bookForm.setAuthor("Teste");
+        //bookForm.setAuthor("Teste");
         return bookForm;
     }
 
@@ -46,7 +46,7 @@ public final class BookBuilder {
         book.setId(1L);
         book.setIsbn("1010");
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
 
         List<BookDTO> books = new ArrayList<>();
         books.add(book);
@@ -71,7 +71,7 @@ public final class BookBuilder {
         Book book = new Book();
         book.setId(1L);
         book.setTitle("Livro Teste");
-        book.setAuthor("Teste");
+        //book.setAuthor("Teste");
         book.setIsbn("1010");
 
         User user = new User();
