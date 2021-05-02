@@ -3,9 +3,11 @@ package com.example.libraryapi.services;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
+import com.example.libraryapi.entities.Author;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
 import com.example.libraryapi.exceptions.BusinessException;
+import com.example.libraryapi.repositories.AuthorRepository;
 import com.example.libraryapi.repositories.BookRepository;
 
 import org.modelmapper.ModelMapper;
@@ -16,12 +18,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
+
     @Autowired
     private BookRepository repository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -29,7 +36,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDTO save(BookFormDTO body) {
         if (!this.repository.existsByIsbn(body.getIsbn())) {
-            Book book = this.repository.save(mapper.map(body, Book.class));
+            Book bookMapper = mapper.map(body, Book.class);
+            bookMapper.setAuthors(this.findAuthors(body.getAuthors()));
+            Book book = this.repository.save(bookMapper);
             return mapper.map(book, BookDTO.class);
         } else {
             throw new BusinessException(409, "CONFLICT", "ISBN is conflict");
@@ -68,7 +77,7 @@ public class BookServiceImpl implements BookService {
         Book book = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
         book.setTitle(body.getTitle());
-        book.setAuthor(body.getAuthor());
+        book.setAuthors(this.findAuthors(body.getAuthors()));
         if (body.getIsbn().equals(book.getIsbn())) {
             Book bookUpdated = this.repository.save(book);
             return mapper.map(bookUpdated, BookDTO.class);
@@ -89,4 +98,15 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Book not found"));
         this.repository.delete(book);
     }
+
+    private List<Author> findAuthors(List<Long> authors) {
+        return authors.stream().map(id -> {
+            Optional<Author> author = this.authorRepository.findById(id);
+            if (author.isPresent()) {
+                return author.get();
+            }
+            return null;
+        }).collect(Collectors.toList());
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.example.libraryapi.entities;
 
+import com.example.libraryapi.constants.Gender;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,6 +19,9 @@ public class User {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private Gender sexo;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Loan> loans;

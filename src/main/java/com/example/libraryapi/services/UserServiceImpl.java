@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository repository;
 
@@ -68,6 +69,7 @@ public class UserServiceImpl implements UserService {
         User user = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "User not found"));
         user.setName(body.getName());
+        user.setSexo(body.getSexo());
         if (body.getEmail().equals(user.getEmail())) {
             User userUpdated = this.repository.save(user);
             return mapper.map(userUpdated, UserDTO.class);
@@ -88,4 +90,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "User not found"));
         this.repository.delete(user);
     }
+
 }

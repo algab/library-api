@@ -18,6 +18,7 @@ import java.time.LocalDate;
 
 @Service
 public class LoanServiceImpl implements LoanService {
+
     @Autowired
     private LoanRepository loanRepository;
 
@@ -60,4 +61,5 @@ public class LoanServiceImpl implements LoanService {
                 .orElseThrow(() -> new BusinessException(404,"NOT_FOUND","Loan not found"));
         this.loanRepository.delete(loan);
     }
+
 }

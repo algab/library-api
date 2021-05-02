@@ -52,7 +52,7 @@ public class BookController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<BookDTO> search(@PathVariable Long id, @RequestBody @Valid BookFormDTO body) {
+    public ResponseEntity<BookDTO> update(@PathVariable Long id, @RequestBody @Valid BookFormDTO body) {
         BookDTO book = this.service.update(id, body);
         return ResponseEntity.ok(book);
     }

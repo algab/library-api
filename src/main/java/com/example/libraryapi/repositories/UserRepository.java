@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Boolean existsByEmail(String email);
+
     @Query("select loan from Loan loan where loan.user.id = ?1")
     Page<Loan> findLoans(Long id, Pageable page);
+
 }
