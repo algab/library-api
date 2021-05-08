@@ -2,7 +2,9 @@ package com.example.libraryapi.services;
 
 import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.AuthorFormDTO;
+import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.entities.Author;
+import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.exceptions.BusinessException;
 import com.example.libraryapi.repositories.AuthorRepository;
 import org.modelmapper.ModelMapper;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +51,16 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public Page<BookDTO> findBooks(Long id, Pageable page) {
+        Page<Book> books = this.repository.findByBooks(id, page);
+        List<BookDTO> booksDTO = books.getContent()
+                .stream()
+                .map(book -> mapper.map(book, BookDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<BookDTO>(booksDTO, page, books.getTotalElements());
+    }
+
+    @Override
     public AuthorDTO update(Long id, AuthorFormDTO body) {
         Author author = this.repository.findById(id)
                 .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Author not found"));
@@ -60,9 +73,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void delete(Long id) {
-        Author author = this.repository.findById(id)
-                .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Author not found"));
-        this.repository.delete(author);
+        try {
+            Author author = this.repository.findById(id)
+                    .orElseThrow(() -> new BusinessException(404, "NOT_FOUND", "Author not found"));
+            this.repository.delete(author);
+        } catch (Exception ex) {
+            throw new BusinessException(409, "CONFLICT", "Deletes all books by that author");
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.libraryapi.controllers;
 
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -49,6 +50,15 @@ public class BookController {
     ) {
         Page<LoanUserDTO> loans = this.service.findLoans(id, page);
         return ResponseEntity.ok(loans);
+    }
+
+    @GetMapping(path = "/{id}/authors")
+    public ResponseEntity<Page<AuthorDTO>> findAuthors(
+            @PathVariable Long id,
+            @PageableDefault(page = 0, size= 10, sort = "id", direction = Sort.Direction.ASC) Pageable page
+    ) {
+        Page<AuthorDTO> authors = this.service.findAuthors(id, page);
+        return ResponseEntity.ok(authors);
     }
 
     @PutMapping(path = "/{id}")

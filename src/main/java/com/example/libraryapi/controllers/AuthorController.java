@@ -2,6 +2,7 @@ package com.example.libraryapi.controllers;
 
 import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.AuthorFormDTO;
+import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +30,7 @@ public class AuthorController {
 
     @GetMapping
     public ResponseEntity<Page<AuthorDTO>> findAll(
-            @PageableDefault(page=0, size=10, sort="id", direction = Sort.Direction.ASC) Pageable page
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable page
     ) {
         Page<AuthorDTO> authors = this.service.findAll(page);
         return ResponseEntity.ok(authors);
@@ -39,6 +40,15 @@ public class AuthorController {
     public ResponseEntity<AuthorDTO> search(@PathVariable Long id) {
         AuthorDTO author = this.service.search(id);
         return ResponseEntity.ok(author);
+    }
+
+    @GetMapping(path = "/{id}/books")
+    public ResponseEntity<Page<BookDTO>> findBooks(
+            @PathVariable Long id,
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable page
+    ) {
+        Page<BookDTO> books = this.service.findBooks(id, page);
+        return ResponseEntity.ok(books);
     }
 
     @PutMapping(path = "/{id}")

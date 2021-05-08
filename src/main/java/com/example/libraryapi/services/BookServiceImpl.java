@@ -1,5 +1,6 @@
 package com.example.libraryapi.services;
 
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -70,6 +71,16 @@ public class BookServiceImpl implements BookService {
                 .map(loan -> mapper.map(loan, LoanUserDTO.class))
                 .collect(Collectors.toList());
         return new PageImpl<>(loansUsers, page, loans.getTotalElements());
+    }
+
+    @Override
+    public Page<AuthorDTO> findAuthors(Long id, Pageable page) {
+        Page<Author> authors = this.repository.findByAuthors(id, page);
+        List<AuthorDTO> authorsDTO = authors.getContent()
+                .stream()
+                .map(author -> mapper.map(author, AuthorDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(authorsDTO, page, authors.getTotalElements());
     }
 
     @Override

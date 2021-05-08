@@ -1,5 +1,6 @@
 package com.example.libraryapi.services;
 
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -15,6 +16,8 @@ public interface BookService {
     BookDTO search(Long id);
 
     Page<LoanUserDTO> findLoans(Long id, Pageable page);
+
+    Page<AuthorDTO> findAuthors(Long id, Pageable page);
 
     BookDTO update(Long id, BookFormDTO body);
 

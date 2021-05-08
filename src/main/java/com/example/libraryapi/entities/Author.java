@@ -25,6 +25,6 @@ public class Author {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.EAGER)
     private List<Book> books;
 }
