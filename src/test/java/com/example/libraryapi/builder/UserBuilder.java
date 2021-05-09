@@ -1,5 +1,6 @@
 package com.example.libraryapi.builder;
 
+import com.example.libraryapi.constants.Gender;
 import com.example.libraryapi.dto.LoanBookDTO;
 import com.example.libraryapi.dto.UserDTO;
 import com.example.libraryapi.dto.UserFormDTO;
@@ -12,37 +13,42 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class UserBuilder {
     public static User getUser() {
         User user = new User();
         user.setId(1L);
-        user.setName("Autor Teste");
+        user.setName("User Test");
         user.setEmail("teste@email.com");
+        user.setSexo(Gender.MASCULINO);
         return user;
     }
 
     public static UserDTO getUserDTO() {
         UserDTO user = new UserDTO();
         user.setId(1L);
-        user.setName("Autor Teste");
+        user.setName("User Test");
         user.setEmail("teste@email.com");
+        user.setSexo(Gender.MASCULINO);
         return user;
     }
 
     public static UserFormDTO getUserFormDTO() {
         UserFormDTO userForm = new UserFormDTO();
-        userForm.setName("Autor Teste");
+        userForm.setName("User Test");
         userForm.setEmail("teste@email.com");
+        userForm.setSexo(Gender.MASCULINO);
         return userForm;
     }
 
     public static Page<UserDTO> listUsers() {
         UserDTO user = new UserDTO();
         user.setId(1L);
-        user.setName("Autor Teste");
+        user.setName("User Test");
         user.setEmail("teste@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         List<UserDTO> users = new ArrayList<>();
         users.add(user);
@@ -66,14 +72,14 @@ public final class UserBuilder {
     public static Page<Loan> loansUser() {
         Book book = new Book();
         book.setId(1L);
-        book.setTitle("Livro Teste");
-        //book.setAuthor("Teste");
-        book.setIsbn("1010");
+        book.setTitle("A Guerra dos Tronos");
+        book.setAuthors(Arrays.asList(AuthorBuilder.getAuthor()));
+        book.setIsbn("1000");
 
         User user = new User();
         user.setId(1L);
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
 
         Loan loan = new Loan();
         loan.setId(1L);

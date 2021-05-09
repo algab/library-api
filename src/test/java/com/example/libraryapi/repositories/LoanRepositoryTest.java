@@ -1,5 +1,7 @@
 package com.example.libraryapi.repositories;
 
+import com.example.libraryapi.builder.AuthorBuilder;
+import com.example.libraryapi.constants.Gender;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
 import com.example.libraryapi.entities.User;
@@ -10,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("Tests for Loan Repository")
 public class LoanRepositoryTest {
+
     @Autowired
     private BookRepository bookRepository;
 
@@ -63,13 +67,14 @@ public class LoanRepositoryTest {
 
     public Loan createLoan() {
         Book book = new Book();
-        book.setTitle("Livro Teste");
-        //book.setAuthor("Teste");
-        book.setIsbn("1010");
+        book.setTitle("A Guerra dos Tronos");
+        book.setAuthors(Arrays.asList(AuthorBuilder.getAuthor()));
+        book.setIsbn("1000");
 
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         Book bookSaved = this.bookRepository.save(book);
         User userSaved = this.userRepository.save(user);

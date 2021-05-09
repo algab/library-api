@@ -1,5 +1,7 @@
 package com.example.libraryapi.repositories;
 
+import com.example.libraryapi.builder.AuthorBuilder;
+import com.example.libraryapi.constants.Gender;
 import com.example.libraryapi.entities.Book;
 import com.example.libraryapi.entities.Loan;
 import com.example.libraryapi.entities.User;
@@ -12,12 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("Tests for User Repository")
 public class UserRepositoryTest {
+
     @Autowired
     private UserRepository repository;
 
@@ -31,8 +35,9 @@ public class UserRepositoryTest {
     @DisplayName("Save User Successful")
     void saveUser() {
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         Boolean existsEmail = this.repository.existsByEmail(user.getEmail());
 
@@ -50,8 +55,9 @@ public class UserRepositoryTest {
     @DisplayName("Duplicate Email User")
     void duplicateUser() {
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         this.repository.save(user);
         Boolean existsEmail = this.repository.existsByEmail(user.getEmail());
@@ -63,8 +69,9 @@ public class UserRepositoryTest {
     @DisplayName("List of all users")
     void listBooks() {
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         this.repository.save(user);
         List<User> users = this.repository.findAll();
@@ -77,8 +84,9 @@ public class UserRepositoryTest {
     @DisplayName("Search User")
     void searchBook() {
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         User userSaved = this.repository.save(user);
         Optional<User> search = this.repository.findById(userSaved.getId());
@@ -87,37 +95,6 @@ public class UserRepositoryTest {
         Assertions.assertThat(search.get().getId()).isEqualTo(userSaved.getId());
         Assertions.assertThat(search.get().getName()).isEqualTo(userSaved.getName());
         Assertions.assertThat(search.get().getEmail()).isEqualTo(userSaved.getEmail());
-    }
-
-    @Test
-    @DisplayName("Update User Successful")
-    void updateBook() {
-        User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
-
-        User userSaved = this.repository.save(user);
-        userSaved.setName("Teste Teste");
-        User userUpdated = this.repository.save(userSaved);
-
-        Assertions.assertThat(userUpdated).isNotNull();
-        Assertions.assertThat(userUpdated.getId()).isNotNull();
-        Assertions.assertThat(userUpdated.getName()).isEqualTo(userSaved.getName());
-        Assertions.assertThat(userUpdated.getEmail()).isEqualTo(userSaved.getEmail());
-    }
-
-    @Test
-    @DisplayName("Delete User Successful")
-    void deleteBook() {
-        User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
-
-        User userSaved = this.repository.save(user);
-        this.repository.delete(userSaved);
-        Optional<User> userOptional = this.repository.findById(userSaved.getId());
-
-        Assertions.assertThat(userOptional).isEmpty();
     }
 
     @Test
@@ -131,15 +108,49 @@ public class UserRepositoryTest {
         Assertions.assertThat(loans.getPageable().getPageNumber()).isEqualTo(0);
     }
 
+    @Test
+    @DisplayName("Update User Successful")
+    void updateBook() {
+        User user = new User();
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
+
+        User userSaved = this.repository.save(user);
+        userSaved.setName("Test Test");
+        User userUpdated = this.repository.save(userSaved);
+
+        Assertions.assertThat(userUpdated).isNotNull();
+        Assertions.assertThat(userUpdated.getId()).isNotNull();
+        Assertions.assertThat(userUpdated.getName()).isEqualTo(userSaved.getName());
+        Assertions.assertThat(userUpdated.getEmail()).isEqualTo(userSaved.getEmail());
+    }
+
+    @Test
+    @DisplayName("Delete User Successful")
+    void deleteBook() {
+        User user = new User();
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
+
+        User userSaved = this.repository.save(user);
+        this.repository.delete(userSaved);
+        Optional<User> userOptional = this.repository.findById(userSaved.getId());
+
+        Assertions.assertThat(userOptional).isEmpty();
+    }
+
     public User createLoan() {
         Book book = new Book();
-        book.setTitle("Livro Teste");
-        //book.setAuthor("Teste");
-        book.setIsbn("1010");
+        book.setTitle("A Guerra dos Tronos");
+        book.setAuthors(Arrays.asList(AuthorBuilder.getAuthor()));
+        book.setIsbn("1000");
 
         User user = new User();
-        user.setName("Teste");
-        user.setEmail("teste@email.com");
+        user.setName("Test");
+        user.setEmail("test@email.com");
+        user.setSexo(Gender.MASCULINO);
 
         Book bookSaved = this.bookRepository.save(book);
         User userSaved = this.repository.save(user);
