@@ -1,8 +1,10 @@
 package com.example.libraryapi.exceptions;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class BusinessException extends RuntimeException {
 
     private Integer status;

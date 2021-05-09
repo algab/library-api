@@ -1,6 +1,8 @@
 package com.example.libraryapi.services;
 
+import com.example.libraryapi.builder.AuthorBuilder;
 import com.example.libraryapi.builder.BookBuilder;
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -36,6 +38,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Book Service")
 public class BookServiceTest {
+
     @Autowired
     private BookService service;
 
@@ -54,7 +57,7 @@ public class BookServiceTest {
 
         assertThat(bookDTO.getId()).isNotNull();
         assertThat(bookDTO.getTitle()).isEqualTo(book.getTitle());
-        //assertThat(bookDTO.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(bookDTO.getIsbn()).isEqualTo(book.getIsbn());
     }
 
     @Test
@@ -94,9 +97,8 @@ public class BookServiceTest {
         BookDTO bookDTO = this.service.search(book.getId());
 
         assertThat(bookDTO).isNotNull();
-        assertThat(bookDTO.getIsbn()).isEqualTo(book.getIsbn());
         assertThat(bookDTO.getTitle()).isEqualTo(book.getTitle());
-        //assertThat(bookDTO.getAuthor()).isEqualTo(book.getAuthor());
+        assertThat(bookDTO.getIsbn()).isEqualTo(book.getIsbn());
     }
 
     @Test
@@ -127,12 +129,27 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Find authors")
+    public void findAuthors() {
+        PageRequest pageRequest = PageRequest.of(0, 10);
+
+        when(this.repository.findByAuthors(anyLong(), any(PageRequest.class)))
+                .thenReturn(BookBuilder.authors());
+
+        Page<AuthorDTO> authors = this.service.findAuthors(1L, pageRequest);
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.getContent()).hasSize(1);
+        assertThat(authors.getTotalPages()).isEqualTo(1);
+        assertThat(authors.getTotalElements()).isEqualTo(1);
+    }
+
+    @Test
     @DisplayName("Update book")
     public void updateBook() {
         Book book = BookBuilder.getBook();
         BookFormDTO bookFormDTO = BookBuilder.getBookFormDTO();
-        //bookFormDTO.setAuthor("Teste 10");
-        bookFormDTO.setTitle("Teste 10");
+        bookFormDTO.setTitle("A Fúria dos Reis");
 
         when(this.repository.findById(anyLong())).thenReturn(Optional.of(book));
         when(this.repository.save(any(Book.class))).thenReturn(book);
@@ -140,9 +157,8 @@ public class BookServiceTest {
         BookDTO bookDTO = this.service.update(book.getId(), bookFormDTO);
 
         assertThat(bookDTO.getId()).isNotNull();
-        assertThat(bookDTO.getIsbn()).isEqualTo(bookFormDTO.getIsbn());
         assertThat(bookDTO.getTitle()).isEqualTo(bookFormDTO.getTitle());
-        //assertThat(bookDTO.getAuthor()).isEqualTo(bookFormDTO.getAuthor());
+        assertThat(bookDTO.getIsbn()).isEqualTo(book.getIsbn());
     }
 
     @Test
@@ -151,8 +167,7 @@ public class BookServiceTest {
         Book book = BookBuilder.getBook();
         BookFormDTO bookFormDTO = BookBuilder.getBookFormDTO();
         bookFormDTO.setIsbn("2020");
-        //bookFormDTO.setAuthor("Teste 10");
-        bookFormDTO.setTitle("Teste 10");
+        bookFormDTO.setTitle("A Fúria dos Reis");
 
         when(this.repository.findById(anyLong())).thenReturn(Optional.of(book));
         when(this.repository.existsByIsbn(anyString())).thenReturn(false);
@@ -161,9 +176,8 @@ public class BookServiceTest {
         BookDTO bookDTO = this.service.update(book.getId(), bookFormDTO);
 
         assertThat(bookDTO.getId()).isNotNull();
-        assertThat(bookDTO.getIsbn()).isEqualTo(bookFormDTO.getIsbn());
         assertThat(bookDTO.getTitle()).isEqualTo(bookFormDTO.getTitle());
-        //assertThat(bookDTO.getAuthor()).isEqualTo(bookFormDTO.getAuthor());
+        assertThat(bookDTO.getIsbn()).isEqualTo(book.getIsbn());
     }
 
     @Test
@@ -183,8 +197,7 @@ public class BookServiceTest {
         Book book = BookBuilder.getBook();
         BookFormDTO bookFormDTO = BookBuilder.getBookFormDTO();
         bookFormDTO.setIsbn("2020");
-        //bookFormDTO.setAuthor("Teste 10");
-        bookFormDTO.setTitle("Teste 10");
+        bookFormDTO.setTitle("A Fúria dos Reis");
 
         when(this.repository.findById(anyLong())).thenReturn(Optional.of(book));
         when(this.repository.existsByIsbn(anyString())).thenReturn(true);

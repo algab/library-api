@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -117,7 +118,11 @@ public class BookRepositoryTest {
     @DisplayName("Update Book Successful")
     void updateBook() {
         List<Author> authors = new ArrayList<>();
-        authors.add(AuthorBuilder.getAuthor());
+        Author author = new Author();
+        author.setName("George R. R. Martin");
+        author.setSexo(Gender.MASCULINO);
+        author.setBirthdate(LocalDate.of(1948, Month.SEPTEMBER, 20));
+        authors.add(author);
 
         Book book = new Book();
         book.setTitle("A Guerra dos Tronos");
