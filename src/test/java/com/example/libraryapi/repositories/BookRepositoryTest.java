@@ -1,6 +1,7 @@
 package com.example.libraryapi.repositories;
 
 import com.example.libraryapi.builder.AuthorBuilder;
+import com.example.libraryapi.builder.BookBuilder;
 import com.example.libraryapi.constants.Gender;
 import com.example.libraryapi.entities.Author;
 import com.example.libraryapi.entities.Book;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -22,11 +24,15 @@ import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @DisplayName("Tests for Book Repository")
 public class BookRepositoryTest {
 
     @Autowired
     private BookRepository repository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -115,6 +121,18 @@ public class BookRepositoryTest {
     }
 
     @Test
+    @DisplayName("List authors by book")
+    void findAuthors() {
+        this.createAuthor();
+        Book bookSaved = this.repository.save(BookBuilder.getBook());
+        Page<Author> authors = this.repository.findByAuthors(bookSaved.getId(), PageRequest.of(0, 10));
+
+        Assertions.assertThat(authors.getTotalElements()).isEqualTo(1);
+        Assertions.assertThat(authors.getPageable().getPageSize()).isEqualTo(10);
+        Assertions.assertThat(authors.getPageable().getPageNumber()).isEqualTo(0);
+    }
+
+    @Test
     @DisplayName("Update Book Successful")
     void updateBook() {
         List<Author> authors = new ArrayList<>();
@@ -153,6 +171,14 @@ public class BookRepositoryTest {
         Optional<Book> bookOptional = this.repository.findById(bookSaved.getId());
 
         Assertions.assertThat(bookOptional).isEmpty();
+    }
+
+    public void createAuthor() {
+        Author author = new Author();
+        author.setName("George R. R. Martin");
+        author.setSexo(Gender.MASCULINO);
+        author.setBirthdate(LocalDate.of(1948, Month.SEPTEMBER, 20));
+        this.authorRepository.save(author);
     }
 
     public Book createLoan() {

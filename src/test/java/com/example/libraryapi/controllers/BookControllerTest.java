@@ -1,6 +1,7 @@
 package com.example.libraryapi.controllers;
 
 import com.example.libraryapi.builder.BookBuilder;
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -55,7 +56,6 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("List Books Controller")
+    @DisplayName("List books controller")
     public void listBooks() throws Exception {
         Page<BookDTO> page = BookBuilder.listBooks();
         BDDMockito.given(this.service.findAll(any(PageRequest.class))).willReturn(page);
@@ -111,7 +111,7 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Search Book Controller")
+    @DisplayName("Search book controller")
     public void searchBook() throws Exception {
         BookDTO book = BookBuilder.getBookDTO();
 
@@ -125,7 +125,6 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test
@@ -146,12 +145,29 @@ public class BookControllerTest {
     }
 
     @Test
-    @DisplayName("Update Book Controller")
+    @DisplayName("Find authors by book controller")
+    public void findAuthors() throws Exception {
+        Page<AuthorDTO> authors = BookBuilder.authorsDTO();
+
+        BDDMockito.given(this.service.findAuthors(anyLong(), any(PageRequest.class))).willReturn(authors);
+
+        RequestBuilder request = MockMvcRequestBuilders.get(String.format("%s/%d/authors", API_BOOKS, 1))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(request).andExpect(status().isOk());
+        mockMvc.perform(request).andExpect(jsonPath("content").isArray());
+        mockMvc.perform(request).andExpect(jsonPath("size").value(10));
+        mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
+    }
+
+    @Test
+    @DisplayName("Update book controller")
     public void updateBook() throws Exception {
         BookDTO book = BookBuilder.getBookDTO();
         BookFormDTO bookForm = BookBuilder.getBookFormDTO();
-        //book.setAuthor("Novo Teste");
-        //bookForm.setAuthor("Novo Teste");
+        book.setTitle("A Fúria dos Reis");
+        bookForm.setTitle("A Fúria dos Reis");
         BDDMockito.given(this.service.update(anyLong(),any(BookFormDTO.class))).willReturn(book);
         String json = new ObjectMapper().writeValueAsString(bookForm);
 
@@ -163,11 +179,10 @@ public class BookControllerTest {
         mockMvc.perform(request).andExpect(jsonPath("id").value(book.getId()));
         mockMvc.perform(request).andExpect(jsonPath("isbn").value(book.getIsbn()));
         mockMvc.perform(request).andExpect(jsonPath("title").value(book.getTitle()));
-        //mockMvc.perform(request).andExpect(jsonPath("author").value(book.getAuthor()));
     }
 
     @Test
-    @DisplayName("Delete Book Controller")
+    @DisplayName("Delete book controller")
     public void deleteBook() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.delete(API_BOOKS.concat("/" + 1));
 

@@ -1,5 +1,6 @@
 package com.example.libraryapi.builder;
 
+import com.example.libraryapi.dto.AuthorDTO;
 import com.example.libraryapi.dto.BookDTO;
 import com.example.libraryapi.dto.BookFormDTO;
 import com.example.libraryapi.dto.LoanUserDTO;
@@ -98,5 +99,9 @@ public final class BookBuilder {
 
     public static Page<Author> authors() {
         return new PageImpl<>(Arrays.asList(AuthorBuilder.getAuthor()), PageRequest.of(0, 10), 1);
+    }
+
+    public static Page<AuthorDTO> authorsDTO() {
+        return new PageImpl<>(Arrays.asList(AuthorBuilder.getAuthorDTO()), PageRequest.of(0, 10), 1);
     }
 }
