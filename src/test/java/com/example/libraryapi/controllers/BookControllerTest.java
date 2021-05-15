@@ -138,7 +138,6 @@ public class BookControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         mockMvc.perform(request).andExpect(status().isOk());
-        mockMvc.perform(request).andExpect(status().isOk());
         mockMvc.perform(request).andExpect(jsonPath("content").isArray());
         mockMvc.perform(request).andExpect(jsonPath("size").value(1));
         mockMvc.perform(request).andExpect(jsonPath("totalPages").value(1));
